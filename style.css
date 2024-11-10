@@ -1,0 +1,42 @@
+body {
+    background-color: #222;
+    color: #eee;
+}
+
+
+#sidebar {
+    width: 200px;
+    background-color: #7c7474;
+    padding: 10px;
+    border-right: 1px solid #ccc;
+}
+
+#sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#sidebar li {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.window {
+    border: 2px solid #ccc; 
+    width: 300px; 
+    margin: 10px; 
+    position: absolute; 
+    background-color: #333; 
+    color: #eee; 
+  }
+  
+  .header {
+    background-color: #222; 
+    padding: 10px; 
+    cursor: move; 
+  }
+  
+  .content {
+    padding: 10px; 
+  }
