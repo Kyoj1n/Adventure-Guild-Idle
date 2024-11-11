@@ -1,12 +1,39 @@
 body {
     background-color: #222;
     color: #eee;
+    margin: 0;
 }
 
+#top-bar {
+  background-color: #333;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border: #716e6e;
+  z-index: 10;
+  justify-content: flex-end;
+}
+
+#account-name {
+  margin-right: 10px;
+
+}
+
+#settings-button {
+  margin-right: 10px;
+}
+
+#container {
+  display: flex;
+}
 
 #sidebar {
     width: 200px;
-    background-color: #7c7474;
+    background-color: #333;
     padding: 10px;
     border-right: 1px solid #ccc;
 }
@@ -22,6 +49,13 @@ body {
     cursor: pointer;
 }
 
+#game-area {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
 .window {
     border: 2px solid #ccc; 
     width: 300px; 
@@ -29,14 +63,22 @@ body {
     position: absolute; 
     background-color: #333; 
     color: #eee; 
+    -webkit-app-region: drag;
   }
   
   .header {
     background-color: #222; 
     padding: 10px; 
     cursor: move; 
+    -webkit-app-region: no-drag;
   }
   
   .content {
     padding: 10px; 
+  }
+
+  .collapse-button {
+    float: right;
+    width: 10px;
+    height: 15px;
   }
