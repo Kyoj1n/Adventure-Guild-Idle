@@ -32,7 +32,6 @@ body {
 }
 
 #sidebar {
-    width: 200px;
     background-color: #333;
     padding: 10px;
     border-right: 1px solid #ccc;

@@ -27,20 +27,25 @@ function createWindow(id, title) {
     windowDiv.appendChild(contentDiv);
 
     let newX 
-    let newY
+    let newY 
 
     const windows = document.querySelectorAll('.window');
     windows.forEach(existingWindow => {
         if (existingWindow !== windowDiv) {
             const existingRect = existingWindow.getBoundingClientRect();
             const newRect = windowDiv.getBoundingClientRect();
+            console.log("window")
+            // Check if the windows overlap horizontally
+            const overlapX = newRect.left < existingRect.right && newRect.right > existingRect.left;
 
-            if (newRect.left < existingRect.right &&
-                newRect.right > existingRect.left &&
-                newRect.top < existingRect.bottom &&
-                newRect.bottom > existingRect.top) {
-                newX += existingWindow.offsetWidth + 10;
-                }
+            // Check if the windows overlap vertically
+            const overlapY = newRect.top < existingRect.bottom && newRect.bottom > existingRect.top;
+
+            // If both overlapX and overlapY are true, then the windows overlap
+            if (overlapX && overlapY) {
+            newX += existingWindow.offsetWidth + 100;
+            console.log("overlap")
+            }
         }
     });
 
@@ -123,6 +128,9 @@ document.addEventListener('DOMContentLoaded', () => {
             activeWindow = header.parentNode;
         });
     });
+
+    
+
     document.addEventListener("mouseup", (e) => {
         if (isDragging) {
             isDragging = false;
@@ -131,11 +139,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const mouseX = e.clientX - gameAreaRect.left;
     
             const columnWidth = gameAreaRect.width / 3;
-            const columnIndex = (Math.ceil(mouseX / columnWidth));
+            let columnIndex = (Math.ceil(mouseX / columnWidth));
+
+            if (columnIndex <= 0) {
+                console.log("out of bounds")
+                columnIndex = 1
+            } if (columnIndex >= 3) {
+                columnIndex = 3
+            }
     
-            const newX = columnIndex * columnWidth - (columnWidth / 2);
+            const newX = (columnIndex * columnWidth) + 100 - columnWidth;
     
-            console.log("Window dropped in column:", columnIndex + 2);
+            console.log("Window dropped in column:", columnIndex);
+            console.log("Window dropped at:", newX);
+            console.log("columnWidth", columnWidth);
     
             activeWindow.style.left = newX + 'px';
     
@@ -154,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const columnWidth = gameAreaRect.width / 3;
         const columnIndex = Math.min(Math.floor(mouseX / columnWidth), 2);
 
-        console.log("Window dropped in column:", columnIndex + 2);
+        console.log("Window dropped in column:", columnIndex);
         console.log(gameAreaRect.width)
         console.log(mouseX)
 
