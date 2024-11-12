@@ -121,7 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
     windowHeaders.forEach(header => {
         header.addEventListener("mousedown", (e) => {
             isDragging = true;
-    
+            
+            if (e.target.classList.contains('header')) {
+                e.preventDefault();
+            }
+
             // Calculate the offset considering the window's position and scoll
             offsetX = e.clientX - header.parentNode.getBoundingClientRect().left;
             offsetY = e.clientY - header.parentNode.getBoundingClientRect().top;
@@ -129,7 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    
+    function checkWindowOverlap(window1, window2) {
+        const rect1 = window1.getBoundingClientRect();
+        const rect2 = window2.getBoundingClientRect();
+
+        const overlapX = rect1.left < rect2.right && rect1.right > rect2.left;
+        const overlapY = rect1.top < rect2.bottom && rect1.bottom > rect2.top;
+
+        return overlapX && overlapY;
+    }
 
     document.addEventListener("mouseup", (e) => {
         if (isDragging) {
@@ -148,14 +160,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 columnIndex = 3
             }
     
-            const newX = (columnIndex * columnWidth) + 100 - columnWidth;
-    
-            console.log("Window dropped in column:", columnIndex);
-            console.log("Window dropped at:", newX);
-            console.log("columnWidth", columnWidth);
-    
+            const newX = (columnIndex * columnWidth) + 100 - columnWidth;  
             activeWindow.style.left = newX + 'px';
-    
+           
+            const windows = document.querySelectorAll('.window');
+            windows.forEach(otherWindow => {
+                if (otherWindow !== activeWindow && checkWindowOverlap(activeWindow, otherWindow)) {
+                    console.log("Window overlap!")
+                    const newY = otherWindow.getBoundingClientRect().top + 100;
+                    otherWindow.style.top =  newY + 'px';
+                }
+            });
             activeWindow = null;
         }
     });
@@ -170,10 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const columnWidth = gameAreaRect.width / 3;
         const columnIndex = Math.min(Math.floor(mouseX / columnWidth), 2);
-
-        console.log("Window dropped in column:", columnIndex);
-        console.log(gameAreaRect.width)
-        console.log(mouseX)
 
         // Calculate the new position using getBoundingClientRect for accurate positioning
         const newX = e.clientX - offsetX;
