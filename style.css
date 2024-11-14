@@ -1,6 +1,8 @@
-body {
+
+html, body {
     background-color: #222;
     color: #eee;
+    height: 100%;
     margin: 0;
 }
 
@@ -29,6 +31,7 @@ body {
 
 #container {
   display: flex;
+  height: 100%;
 }
 
 #sidebar {
@@ -51,19 +54,36 @@ body {
 #game-area {
   left: 0;
   width: 100%;
+  height: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   padding: 10px;
 }
+#game-area .column:nth-child(1) { 
+  background-color: rgba(255, 0, 0, 0.1); /* Light red */
+}
+
+#game-area .column:nth-child(2) {
+  background-color: rgba(0, 255, 0, 0.1); /* Light green */
+}
+
+#game-area .column:nth-child(3) {
+  background-color: rgba(0, 0, 255, 0.1); /* Light blue */
+}
+
+.column {
+  overflow: hidden; 
+}
 
 .window {
     border: 2px solid #ccc; 
     width: 300px; 
-    margin: 10px; 
     position: absolute; 
+    margin: 10px;
     background-color: #333; 
     color: #eee; 
+    z-index: 1;
     -webkit-app-region: drag;
   }
   
