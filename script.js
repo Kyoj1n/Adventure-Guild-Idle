@@ -11,10 +11,41 @@ const windowHeaders = document.querySelectorAll(".window .header");
 let isDragging = false;
 let offsetX, offsetY;
 let activeWindow = null;
-const gameArea = document.getElementById('game-area');
+
+//Switching areas constants
+const townArea = document.getElementById('TownArea');
+const workersArea = document.getElementById('WorkersArea');
+const heroesArea = document.getElementById('HeroesArea');
+const questBoardArea = document.getElementById('QuestBoardArea');
+const adventuresArea = document.getElementById('AdventuresArea');
+
+const townButton = document.getElementById('townButton');
+const workersButton = document.getElementById('workersButton');
+const heroesButton = document.getElementById('heroesButton');
+const questBoardButton = document.getElementById('questBoardButton');
+const adventuresButton = document.getElementById('adventuresButton');
+
+// Function for changing areas
+function showArea(areaId) {
+    townArea.style.display = areaId === 'TownArea' ? 'grid' : 'none';
+    workersArea.style.display = areaId === 'WorkersArea' ? 'block' : 'none';
+    heroesArea.style.display = areaId === 'HeroesArea' ? 'block' : 'none';
+    questBoardArea.style.display = areaId === 'QuestBoardArea' ? 'block' : 'none';
+    adventuresArea.style.display = areaId === 'AdventuresArea' ? 'block' : 'none';
+}
+
+//Click Events for area buttons
+townButton.addEventListener('click', () => showArea('TownArea'));
+workersButton.addEventListener('click', () => showArea('WorkersArea'));
+heroesButton.addEventListener('click', () => showArea('HeroesArea'));
+questBoardButton.addEventListener('click', () => showArea('QuestBoardArea'));
+adventuresButton.addEventListener('click', () => showArea('AdventuresArea'));
+
+//Initiate first area
+showArea('TownArea');
 
 // Create new windows
-function createWindow(id, title, columnIndex = 1) {
+function createBuildingWindow(id, title, columnIndex = 1) {
     const windowDiv = document.createElement('div');
     windowDiv.classList.add('window');
     windowDiv.id = id;
@@ -39,17 +70,35 @@ function createWindow(id, title, columnIndex = 1) {
     windowDiv.style.left = newX + 'px';
     windowDiv.style.top = newY + 'px';
 
-    const gameAreaWidth = document.getElementById('game-area').offsetWidth;
-    windowDiv.style.width = ((gameAreaWidth / 3) - 50) + "px";
+    const townAreaWidth = document.getElementById('TownArea').offsetWidth;
+    windowDiv.style.width = ((townAreaWidth / 3) - 50) + "px";
     
     windowDiv.style.zIndex = 1;
 
     const column = document.getElementById(`column${columnIndex}`);
     column.appendChild(windowDiv);
   
-
     return windowDiv;
 }
+
+//Create a series of windows for testing purposes
+
+const window1 = createBuildingWindow('building1', 'Building 1');
+
+windowPosition(window1);
+const window2 = createBuildingWindow('building2', 'Building 2');
+
+windowPosition(window2);
+const window3 = createBuildingWindow('building3', 'Building 3');
+
+windowPosition(window3);
+const window4 = createBuildingWindow('building4', 'Building 4');
+
+windowPosition(window4);
+const window5 = createBuildingWindow('building5', 'Building 5');
+
+windowPosition(window5);
+repositionWindowsVertically();
 
 // reposition windows when they are dropped ontop of eachother, switching positions and sorting vertically
 function windowPosition(windowDiv, originalPosition) {
@@ -65,9 +114,13 @@ function windowPosition(windowDiv, originalPosition) {
                     otherWindow.offsetLeft,
                     otherWindow.offsetTop
                 ];
-                otherWindow.style.left = originalPosition[0] - windowDiv.margin + 'px'; //the margins were compounding and moving the windows slowly to the right. 
-                windowDiv.style.left = otherWindowOriginalPosition[0] - windowDiv.margin + 'px'; //the margins were compounding and moving the windows slowly to the right. 
-    
+                const otherWindowComputedStyle = window.getComputedStyle(otherWindow);
+                const otherWindowMargin = otherWindowComputedStyle.margin;
+                const windowDivComputedStyle = window.getComputedStyle(windowDiv);
+                const windowDivMargin = windowDivComputedStyle.margin;
+                otherWindow.style.left = originalPosition[0] - otherWindowMargin + 'px'; //the margins were compounding and moving the windows slowly to the right. 
+                windowDiv.style.left = otherWindowOriginalPosition[0] - windowDivMargin + 'px'; //the margins were compounding and moving the windows slowly to the right. 
+                console.log('new position: ', windowDiv.style.left)
                 // Fill vertical gaps
                 repositionWindowsVertically();
             }
@@ -93,25 +146,6 @@ function repositionWindowsVertically() {
     });
   }
 
-//Create a series of windows for testing purposes
-
-const window1 = createWindow('building1', 'Building 1');
-
-windowPosition(window1);
-const window2 = createWindow('building2', 'Building 2');
-
-windowPosition(window2);
-const window3 = createWindow('building3', 'Building 3');
-
-windowPosition(window3);
-const window4 = createWindow('building4', 'Building 4');
-
-windowPosition(window4);
-const window5 = createWindow('building5', 'Building 5');
-
-windowPosition(window5);
-repositionWindowsVertically();
-
 // Function to toggle the visibility of the content div
 function toggleWindow(windowId) {
     const windowContent = document.querySelector('#' + windowId + ' .content');
@@ -125,7 +159,7 @@ function toggleWindow(windowId) {
 
 // Document listeners
 document.addEventListener('DOMContentLoaded', () => {
-    const collapseButtons = document.querySelectorAll("#game-area .collapse-button");
+    const collapseButtons = document.querySelectorAll("#TownArea .collapse-button");
     let originalPosition;
     collapseButtons.forEach(button => {
         button.addEventListener("click", () => {
@@ -151,10 +185,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isDragging) {
             isDragging = false;
     
-            const gameAreaRect = document.getElementById('game-area').getBoundingClientRect();
-            const mouseX = e.clientX - gameAreaRect.left;
+            const townAreaRect = document.getElementById('TownArea').getBoundingClientRect();
+            const mouseX = e.clientX - townAreaRect.left;
     
-            const columnWidth = gameAreaRect.width / 3;
+            const columnWidth = townAreaRect.width / 3;
             let columnIndex = (Math.ceil(mouseX / columnWidth));
 
             if (columnIndex <= 0) {
@@ -164,12 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 columnIndex = 3
             }
     
-            const newX = (columnIndex * columnWidth) + 100 - columnWidth;  
+            const newX = (columnIndex * columnWidth) + 125 - columnWidth;  
             activeWindow.style.left = newX + 'px';
 
             const column = document.getElementById(`column${columnIndex}`);
             column.appendChild(activeWindow);
-           
             windowPosition(activeWindow, originalPosition);
             repositionWindowsVertically();
             activeWindow = null;
@@ -181,10 +214,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
         e.preventDefault();
 
-        const gameAreaRect = document.getElementById('game-area').getBoundingClientRect();
-        const mouseX = e.clientX - gameAreaRect.left;
+        const townAreaRect = document.getElementById('TownArea').getBoundingClientRect();
+        const mouseX = e.clientX - townAreaRect.left;
 
-        const columnWidth = gameAreaRect.width / 3;
+        const columnWidth = townAreaRect.width / 3;
         // const columnIndex = Math.min(Math.floor(mouseX / columnWidth), 2);
 
         // Calculate the new position using getBoundingClientRect for accurate positioning
@@ -212,7 +245,7 @@ function checkWindowOverlap(window1, window2) {
 
 function resizeWindows() {
     const windows = document.querySelectorAll('.window');
-    const columnWidth = gameArea.offsetWidth / 3; //new column width
+    const columnWidth = townArea.offsetWidth / 3; //new column width
 
     windows.forEach(window => {
         const columnIndex = Math.floor(window.offsetLeft / columnWidth);
@@ -226,3 +259,5 @@ function resizeWindows() {
 
 //Browser resizing event listener
 window.addEventListener('resize', resizeWindows);
+
+//
