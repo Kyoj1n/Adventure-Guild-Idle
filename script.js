@@ -249,7 +249,7 @@ function resizeWindows() {
 
     windows.forEach(window => {
         const columnIndex = Math.floor(window.offsetLeft / columnWidth);
-        const newX = (columnIndex * columnWidth) + 100;  
+        const newX = (columnIndex * columnWidth) + 125;  
         const newWidth = columnWidth - 50;
 
         window.style.left = newX + 'px';
@@ -260,4 +260,71 @@ function resizeWindows() {
 //Browser resizing event listener
 window.addEventListener('resize', resizeWindows);
 
-//
+// **Worker Area** 
+
+//create worker windows
+function createWorkerWindow(workerData) {
+    const workerWindow = document.createElement('div');
+    workerWindow.classList.add('workerWindow');
+
+    //Worker name
+    const nameDiv = document.createElement('div');
+    nameDiv.classList.add('workerHeader');
+    nameDiv.textContent = workerData.name;
+    workerWindow.appendChild(nameDiv);
+
+    //Worker picture
+    const picture = document.createElement('img');
+    picture.classList.add('workerPicture');
+    picture.src = workerData.picture;
+    picture.alt = workerData.picture + ' Picture';
+    picture.style.height = '100px';
+    picture.style.width = '100px';
+    picture.style.padding = '10px'
+    workerWindow.appendChild(picture);
+
+    //Worker skills
+    const skillsDiv = document.createElement('div');
+    skillsDiv.classList.add('workerSkills');
+    const skillsList = document.createElement('ul');
+    workerData.skills.forEach(skill => {
+        const skillItem = document.createElement('li');
+        skillItem.textContent = skill.name + ": Level " + skill.level;
+        skillsList.appendChild(skillItem);
+    });
+    skillsDiv.appendChild(skillsList);
+    workerWindow.appendChild(skillsDiv);
+
+    //Worker Data
+    const statsDiv = document.createElement('div');
+    statsDiv.classList.add('workerStats');
+    const statsList = document.createElement('ul');
+    workerData.stats.forEach(stat => {
+        const statItem = document.createElement('li');
+        statItem.textContent = stat.name + ": " + stat.value;
+        statsList.appendChild(statItem);
+    });
+    statsDiv.appendChild(statsList);
+    workerWindow.appendChild(statsDiv);
+
+    //Worker ability
+    const abilitiesDiv = document.createElement('div');
+    abilitiesDiv.classList.add('workerAbilities');
+    const abilitiesList = document.createElement('ul');
+    workerData.abilities.forEach(abitlity => {
+        const abitlityItem = document.createElement('li');
+        abitlityItem.textContent = abitlity;
+        abilitiesList.appendChild(abitlityItem);
+    });
+    abilitiesDiv.appendChild(abilitiesList);
+
+    workerWindow.appendChild(abilitiesDiv);
+
+    return workerWindow;
+}
+
+const workers = getWorkerData();
+workers.forEach(worker => {
+    const workerWindow = createWorkerWindow(worker);
+    workersArea.appendChild(workerWindow);
+});
