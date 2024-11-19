@@ -1,22 +1,17 @@
-//Data creation and manipulation
+import workerData from './workers.js';
 
-const workerData = {
-    name: 'Will the Worker',
-    picture: 'will.png',
-    skills: [
-        { name: 'Working time', level: 5},
-        { name: 'Overtime', level: 2},
-    ],
-    stats: [
-        { name: 'Work Speed', value: 1},
-    ],
-    abilities: ['Can do anything', 'Reliable'],
-};
+
 
 //Get worker data from an outside source
 function getWorkerData() {
-    // nothing for now
-    return [workerData];
+    if (workerName) {
+        //Return specific worker
+        return workerData.find(worker => worker.name === workerName);
+    } else {
+        //Return a random worker
+        const randomIndex = Math.floor(Math.random() * workerData.length);
+        return workerData[randomIndex];
+    }
 }
 
 const buildingData = {
