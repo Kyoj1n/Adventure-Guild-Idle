@@ -1,4 +1,4 @@
-
+import { getWorkerData } from './data.js';
 
 //Getting the height of top-bar and making the container below it
 const topBarHeight = document.getElementById('top-bar').offsetHeight;

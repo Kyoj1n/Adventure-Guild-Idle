@@ -3,7 +3,7 @@ import workerData from './workers.js';
 
 
 //Get worker data from an outside source
-function getWorkerData() {
+function getWorkerData(workerName) {
     if (workerName) {
         //Return specific worker
         return workerData.find(worker => worker.name === workerName);
@@ -12,6 +12,16 @@ function getWorkerData() {
         const randomIndex = Math.floor(Math.random() * workerData.length);
         return workerData[randomIndex];
     }
+}
+export { getWorkerData };
+
+const workerList = [
+    'Will the Worker'
+]
+
+function buildWorkerList(workerCount) {
+
+    return;
 }
 
 const buildingData = {
